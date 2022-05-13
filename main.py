@@ -1,21 +1,12 @@
 # -*- coding: utf-8 -*-
 import sqlite3
 import time
+from translate import Translator
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-
-tabla = ""
-
-
-def consulta(self, cadena):
-    self.cursor.execute(cadena)
-    self.con.commit()
-    return self.cursor.fetchall()
-
-
 
 
 con = sqlite3.connect('bdmonstruos.db')
@@ -36,6 +27,7 @@ table_body = table.find('tbody')
 
 rows = table_body.find_all('tr')
 for row in rows:
+    t = Translator(to_lang="Spanish")
     cols = row.find_all('td')
     cols = [ele.text.strip() for ele in cols]
     data.append([ele for ele in cols if ele]) # Get rid of empty values
@@ -43,7 +35,8 @@ for row in rows:
     valor1=str(cols[1]).replace("'","")
     valor2 = str(cols[2])
     valor3 = str(cols[3]).replace("'", "")
+    valor4 = t.translate(cols[4])
 
-    cur.execute("INSERT INTO mounstruos(nombre,cr,tamaño) VALUES(?,?,?)",[valor1,valor2,valor3])
+    cur.execute("INSERT INTO mounstruos(nombre,cr,tipo,tamaño) VALUES(?,?,?,?)",[valor1,valor2,valor3,valor4])
     con.commit()
 con.close()
