@@ -1,0 +1,7 @@
+#for td in soup.find_all("td", class_='item'):
+    #valor = str(td.get_text()).replace("'", "")
+    #print(valor+valor)
+    cur.execute("INSERT INTO pruieba(nombre) VALUES("+"'"+valor+"'"+")")
+    cur.execute("INSERT INTO pruieba(cr) VALUES("+"'"+valor+"'"+")")
+    con.commit()
+con.close()

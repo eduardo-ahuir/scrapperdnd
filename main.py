@@ -26,17 +26,24 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 driver.get("https://www.google.com")
 # Load the HTML page
 driver.get("https://www.aidedd.org/dnd-filters/monsters.php")
-time.sleep(0)
+time.sleep(10)
 # Parse processed webpage with BeautifulSoup
 soup = BeautifulSoup(driver.page_source, features="lxml")
 
-for td in soup.find_all("td", class_="item"):
-    valor = str(td.get_text()).replace("'", "")
-    print(valor)
-    cur.execute("INSERT INTO pruieba(nombre) VALUES("+"'"+valor+"'"+")")
-    soup.find_all("td", class_="center")
-    valor2 = str(soup.get_text()).replace("'", "")
-    print(valor2)
-    cur.execute("INSERT INTO pruieba(cr) VALUES("+"'"+valor+"'"+")")
-con.commit()
+data = []
+table = soup.find('table', attrs={'class':'liste'})
+table_body = table.find('tbody')
+
+rows = table_body.find_all('tr')
+for row in rows:
+    cols = row.find_all('td')
+    cols = [ele.text.strip() for ele in cols]
+    data.append([ele for ele in cols if ele]) # Get rid of empty values
+    print(str(cols[1])+str(cols[2]))
+    valor1=str(cols[1]).replace("'","")
+    valor2 = str(cols[2])
+    valor3 = str(cols[3]).replace("'", "")
+
+    cur.execute("INSERT INTO mounstruos(nombre,cr,tamaño) VALUES(?,?,?)",[valor1,valor2,valor3])
+    con.commit()
 con.close()
