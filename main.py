@@ -27,7 +27,6 @@ table_body = table.find('tbody')
 
 rows = table_body.find_all('tr')
 for row in rows:
-    t = Translator(to_lang="Spanish")
     cols = row.find_all('td')
     cols = [ele.text.strip() for ele in cols]
     data.append([ele for ele in cols if ele]) # Get rid of empty values
@@ -35,8 +34,8 @@ for row in rows:
     valor1=str(cols[1]).replace("'","")
     valor2 = str(cols[2])
     valor3 = str(cols[3]).replace("'", "")
-    valor4 = t.translate(cols[4])
+    valor4 = str(cols[4]).replace("'", "")
 
-    cur.execute("INSERT INTO mounstruos(nombre,cr,tipo,tamaño) VALUES(?,?,?,?)",[valor1,valor2,valor3,valor4])
+    cur.execute("INSERT INTO mounstruos(nombre,cr,tipo,tamanyo) VALUES(?,?,?,?)",[valor1,valor2,valor3,valor4])
     con.commit()
 con.close()
